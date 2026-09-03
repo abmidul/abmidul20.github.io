@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIDUL'S PRESENT</title>
+
+<style>
+:root{
+  --accent:#4FC3F7;
+  --light-bg:#f4f6f8;
+  --light-box:rgba(255,255,255,.7);
+  --dark-bg:#000;
+  --dark-box:#121212;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden; scroll-behavior: smooth;}
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--dark-bg); /* Default Black */
+  color: #fff;
+  transition: .4s;
+}
+
+body.light {
+  background: var(--light-bg);
+  color: #111;
+}
+
+a{text-decoration:none;color:inherit}
+
+/* TOPBAR */
+.topbar{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:60px;
+  padding:0 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  backdrop-filter:blur(12px);
+  background:rgba(0,0,0,.6);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index:1001;
+}
+
+body.light .topbar {
+  background:rgba(255,255,255,.6);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.logo-circle{
+  width:44px;height:44px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  overflow:hidden;
+  cursor:pointer;
+}
+.logo-circle img{ width:100%; height:100%; object-fit:cover; }
+
+.top-actions{display:flex;gap:16px}
+.menu-btn,.theme-btn{cursor:pointer;font-size:22px}
+
+/* MENU & OVERLAY */
+#overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(5px);
+  display:none; z-index:998;
+}
+
+.menu{
+  position:fixed;
+  top:0;right:-260px;
+  width:260px;height:100vh;
+  padding:90px 20px;
+  backdrop-filter:blur(18px);
+  background:rgba(0,0,0,0.5);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+  transition:.4s;
+  z-index:1000;
+}
+body.light .menu { background:rgba(255,255,255,0.3); }
+.menu.show{right:0}
+.menu div{margin:20px 0;cursor:pointer;color:var(--accent); font-weight: 600;}
+
+/* SECTION */
+section{ padding:100px 20px 40px; max-width: 1000px; margin: auto;}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+/* CARD BASE */
+.glass{
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  transition:.3s;
+  position:relative;
+  background: var(--dark-box);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+body.light .glass {
+  background: var(--light-box);
+  color: #111;
+  box-shadow: 0 8px 20px rgba(0,0,0,.1);
+  border: none;
+}
+
+.glass:hover{transform:translateY(-8px); box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);}
+
+.title{ font-weight:bold; font-size:18px; color:var(--accent); margin-bottom:8px; letter-spacing: 1px;}
+.text{ font-size:14px; line-height:1.6; opacity: 0.9;}
+
+/* HOME BOX */
+.home-box{ max-width:550px; margin:auto; padding:40px; }
+.home-logo{
+  width:130px;height:130px;
+  border-radius:50%;
+  border:4px solid var(--accent);
+  overflow:hidden;
+  margin:0 auto 20px;
+  box-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+}
+.home-logo img{ width:100%;height:100%;object-fit:cover; }
+
+/* --- NEON ANIMATION (ONLY IN DARK MODE) --- */
+body:not(.light) #social .glass,
+body:not(.light) #payment .glass {
+  background: var(--dark-box);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+body:not(.light) #social .glass::after,
+body:not(.light) #payment .glass::after {
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:22px;
+  background:linear-gradient(90deg, #4FC3F7, #ffffff, #ff4fd8, #4FC3F7);
+  background-size:300% 100%;
+  animation:neon 4s linear infinite;
+  z-index:-1;
+}
+
+@keyframes neon{
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding:30px 10px;
+  font-size:14px;
+  background:#111;
+  color:#777;
+  margin-top:60px;
+}
+body.light .footer { background:#e0e0e0; color:#333; }
+
+</style>
+</head>
+
+<body class="dark"> <!-- Starts with Dark -->
+
+<div class="topbar">
+  <div class="logo-circle" onclick="goHome()">
+    <img src="logo.png">
+  </div>
+  <div class="top-actions">
+    <div class="theme-btn" onclick="toggleTheme()">🌓</div>
+    <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeMenu()"></div>
+
+<div class="menu" id="menu">
+  <div onclick="goHome()">Home</div>
+  <div onclick="go('experience')">Experience</div>
+  <div onclick="go('services')">Services</div>
+  <div onclick="go('social')">Social</div>
+  <div onclick="go('payment')">Payment</div>
+  <div onclick="go('about')">About</div>
+</div>
+
+<!-- HOME -->
+<section id="home">
+  <div class="glass home-box">
+    <div class="home-logo">
+      <img src="logo.png">
+    </div>
+    <div class="title">MIDUL'S PRESENT</div>
+    <div class="text">
+      <strong>Abdullah Al Midul</strong><br>
+      Founder & Technologist
+    </div>
+    <div style="margin-top: 15px; font-size: 12px; color: var(--accent); font-weight: bold;">SSC 2026 CANDIDATE</div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2 style="text-align:center; margin-bottom:30px; color:var(--accent)">OUR SERVICES</h2>
+  <div class="grid">
+    <div class="glass">
+      <div class="title">Web Development</div>
+      <div class="text">Specialized in Next.js, Tailwind CSS & Supabase for Luxury Brands.</div>
+    </div>
+    <div class="glass">
+      <div class="title">UI/UX Design</div>
+      <div class="text">Crafting Premium Glassmorphism & Dark Minimalist Interfaces.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="grid">
+    <div class="glass">
+      <div class="title">SKILLS</div>
+      <div class="text">
+        Web Design • UI/UX • Graphic Design • Video Editing • AI Tools • Branding • Python
+      </div>
+    </div>
+    <div class="glass">
+      <div class="title">EDUCATION</div>
+      <div class="text">
+        Mizmizi Paschim Para High School & College<br>SSC 2026
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <h2 style="text-align:center; margin-bottom:30px; color:var(--accent)">GET IN TOUCH</h2>
+  <div class="grid">
+    <a href="tel:+8801981274162" class="glass"><div class="title">CONTACT</div><div class="text">+8801981274162</div></a>
+    <a href="https://maps.app.goo.gl/mYQy7sQgkYGZmcqk7" class="glass"><div class="title">LOCATION</div><div class="text">Amzad Market,Mizmizi,Shiddirganj,Narayanganj</div></a>
+    <a href="mailto:abdullahalmidul@gmail.com" class="glass"><div class="title">GMAIL</div><div class="text">abdullahalmidul@gmail.com</div></a>
+    <a href="https://wa.me/8801981274162" class="glass"><div class="title">WHATSAPP</div><div class="text">+8801981274162</div></a>
+    <a href="https://www.facebook.com/Abdullah.Al.Midul" class="glass"><div class="title">FACEBOOK</div><div class="text">AB MIDUL</div></a>
+    <a href="https://t.me/ab_midul" class="glass"><div class="title">TELEGRAM</div><div class="text">@ab_midul</div></a>
+    <a href="https://x.com/ab_midul" class="glass"><div class="title">X</div><div class="text">@ab_midul</div></a>
+    <a href="https://discord.gg/XN2VqZDA" class="glass"><div class="title">DISCORD</div><div class="text">@ab_midul</div></a>
+    <a href="https://www.tiktok.com/@ab_midul" class="glass"><div class="title">TIKTOK</div><div class="text">@ab_midul</div></a>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section id="payment">
+  <h2 style="text-align:center; margin-bottom:30px; color:var(--accent)">PAYMENT METHODS</h2>
+  <div class="grid">
+    <a href="tel:+8801981274162" class="glass"><div class="title">BKASH</div><div class="text">+8801981274162</div></a>
+    <a href="tel:+8801981274162" class="glass"><div class="title">NAGAD</div><div class="text">+8801981274162</div></a>
+    <a href="https://wa.me/8801981274162" class="glass"><div class="title">BANK ACCOUNT</div><div class="text">Contact in WhatsApp</div></a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="glass home-box">
+    <div class="title">ABOUT MIDUL'S PRESENT</div>
+    <div class="text">
+      Premium creative-tech identity focused on AI, design and digital solutions. 
+      Our vision is to empower brands with cutting-edge technology delivering measurable growth.
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  © 2026 MIDUL'S PRESENT by ab_midul. All Rights Reserved.
+</footer>
+  
+<script>
+const menu=document.getElementById("menu");
+const overlay=document.getElementById("overlay");
+const menuBtn=document.getElementById("menuBtn");
+
+function toggleMenu(){
+  if(menu.classList.contains("show")){
+    closeMenu();
+  }else{
+    menu.classList.add("show");
+    overlay.style.display="block";
+    menuBtn.innerHTML="✖";
+  }
+}
+
+function closeMenu(){
+  menu.classList.remove("show");
+  overlay.style.display="none";
+  menuBtn.innerHTML="☰";
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+function goHome(){
+  window.scrollTo({top:0,behavior:"smooth"});
+  closeMenu();
+}
+
+function go(id){
+  const target = document.getElementById(id);
+  window.scrollTo({
+    top: target.offsetTop - 70,
+    behavior: "smooth"
+  });
+  closeMenu();
+}
+
+// Close menu when clicking overlay
+overlay.addEventListener('click', closeMenu);
+</script>
+
+</body>
+</html>
